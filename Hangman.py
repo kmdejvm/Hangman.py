@@ -1,65 +1,93 @@
 import random 
-# 1. Ask player if they want to play hangman?
 
-def asking_to_play_game():
-    """asks player if they want to play"""
-    prompt = "\nDo you want to play Hangman with me, yes or no? \n>>>"
-    yes_or_no = raw_input(prompt)
-    if yes_or_no == "yes":
-        print "Great!"
-    else:
-        print "Maybe we can play later!" 
-        exit()
-
-# 2. random selection of word 
 def pick_a_word():
-    """given a list of words, a word is selected""" 
-    my_list = ['python', 'coding', 'change', 'living']
+    """given a list of words, a word is selected at random""" 
+    my_list = ['python', 'coding', 'change', 'computer', 'living']
     word = random.choice(my_list)
-    print word # print word # print word #keeping this in for trouble-shooting will remove for actual game
-    return word
+    return word 
 
-# 3. Display blank lines for amount of letters in word that was selected 
 def display_len_lines_in_word(word_to_guess):
-    """display the blank lines in words set equal to length of word"""
-    
+    """display the blank lines in words set equal to length of word""" 
     for length in word_to_guess:
         print "_",
     print "\n"      
 
-# 4. If player guesses a correct letter, replace blank letter with line 
-def pick_a_letter():
-    """given all the letters in the alphabet, the player is asked to pick any letter"""
-    prompt = "\nPick any letter in the alphabet, a-z. \n>>>"
-    letter = raw_input(prompt) 
-    index = word.find(letter)
-    
-    if index == -1:
-        print "That letter is not in the word"
+def pick_a_letter(num_correct_letters, word, word_progress):
+    """picks a letter and determines whether the letter is in the word"""
+    prompt = "\nPick any letter in the alphabet (a-z)\n>>>"
+    letter = raw_input(prompt)
+    num_of_occurrences = word.count(letter)
+    start_search_index = 0
+    if num_of_occurrences == 0:
+        print "Sorry, that letter is not in the word" 
     else:
-       word_progress[index] = letter       
-    
-def display_incorrect_letters_guessed():
-    """if letter is incorrect, display letter"""
-    pass     
+        for num in range(num_of_occurrences):    
+            index = word.find(letter, start_search_index)
+            word_progress[index] = letter
+            start_search_index = index + 1
+        return num_correct_letters + num_of_occurrences
+    return num_correct_letters      
 
- 
-def guessing_correct_word():
-    """if player guesses correct word before dashes are filled, they win!"""
-    pass 
+def guessing_word(word):
+    """Asks player if they want to guess the word"""
+    guess_word = raw_input ("Do you want to guess the word?: ")
+    if guess_word == "yes":
+        final = raw_input ("Guess the word! ")         
+        if final == word:
+            print "Yes, the word was", word, 
+        else:
+            print "Sorry. The word was", word,". Better luck next time!"
+        return True 
+    else:
+        return False         
 
-asking_to_play_game()
-word = pick_a_word()
-word_progress = list(len(word) * "_")
+def play_hangman():
+    """Plays Hangman"""
 
-print "Your word is", str(len(word)), "characters long"
-print word
+    word = pick_a_word()
+    word_progress = list(len(word) * "_")
 
-display_len_lines_in_word(word)
+    print "Your word is", str(len(word)), "characters long, guess a letter!"
 
+    display_len_lines_in_word(word)
+       
+    num_correct_letters = 0
+    while True:
+        num_correct_letters = pick_a_letter(num_correct_letters, word, word_progress)  
+        print word_progress 
+        if "_" not in word_progress:
+            print "You have guessed the word"  
+            break 
+        if num_correct_letters > 2: 
+            if guessing_word(word):
+                break 
+                
 while True:
-    pick_a_letter() 
-    print word_progress 
+    play_again = raw_input ("Do you want to play Hangman? ")  
+    if play_again == "yes" or "Yes":
+        play_hangman()
+    else:
+        print "Have a nice day! "
+        break                    
+     
+    
+        
+           
+
+
+
+
+    
+   
+       
+
+        
+         
+          
         
 
+
+    
+
+        
 
