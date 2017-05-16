@@ -52,24 +52,26 @@ def play_hangman():
     display_len_lines_in_word(word)
        
     num_correct_letters = 0
-    count = 0
+    guesses = 9
+    guessed_letters = ""
     while True:
         num_correct_letters = pick_a_letter(num_correct_letters, word, word_progress)  
         print word_progress 
         if "_" not in word_progress:
             print "You have guessed the word"  
             break 
-        if count > 3:
-            print "You have {} guesses left"
-            count = count - 1
-            return count      
         if num_correct_letters > 2: 
             if guessing_word(word):
-                break        
+                break    
+        if guesses >= 0:
+            print "You have", guesses, "guesses left, choose wisely!"
+            guesses = guesses - 1 
+        if guesses <= 0:
+            print "You only have 1 guess left or you lose!"              
                  
 while True:
     play_again = raw_input ("Do you want to play Hangman? ")  
-    if play_again == "yes":
+    if play_again == "yes" or "Yes":
         play_hangman()   
     else:
         print "Have a nice day! "
